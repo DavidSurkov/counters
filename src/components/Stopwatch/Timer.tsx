@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState, useCallback} from "react";
 import moment from "moment";
 import styled from "styled-components";
 
@@ -11,50 +11,57 @@ const Buttons = styled.div`
   justify-content: space-around;
   align-items: center;
 `;
+
 interface IProps {
-  timer: Date
+  timer: moment.Moment
 }
-export const Timer = (props: IProps) => {
-  const [startDate, setStartDate] = useState<moment.Moment>(moment(props.timer));
-  const [diff, setDiff] = useState("00:00:00");
+
+export const Timer = React.memo((props: IProps) => {
+  //const [startDate, setStartDate] = useState<moment.Moment>(props.timer);
+  const [diff, setDiff] = useState<string>('loading');
+  const [difference, setDifference] = useState<number>()
   let [timer, setTimer] = useState<NodeJS.Timer>();
   const [isRunning, setIsRunning] = useState(false);
+
   const stopHandler = () => {
+    //setDifference(moment().diff);
     setIsRunning(false);
-    // @ts-ignore
-    clearInterval(+timer)
+    timer && clearInterval(timer);
+    console.log(difference)
   }
-
-  const startTimerHandler = () => {
-    /*!timer && */
-    //await setStartDate(moment(new Date()));
+  const startTimerHandler = useCallback(() => {
     setIsRunning(true);
-    if (!timer && !isRunning) {
-      timer = setInterval(() => {
-        debugger
-        let end = moment(new Date());
-        let differ = end.diff(startDate);
-        setDiff(moment.utc(differ).format("HH:mm:ss"));
-      }, 1000)
-      setTimer(timer);
-    } else if (timer && !isRunning) {
-      timer = setInterval(() => {
-        let end = moment(new Date());
-        let differ = end.diff(startDate);
-        setDiff(moment.utc(differ).format("HH:mm:ss"));
-      }, 1000)
-      setTimer(timer);
-    }
+    timer = setInterval(() => {
+      let differ = moment().diff(props.timer);
+      setDifference(differ)
+      setDiff(moment.utc(differ).format("HH:mm:ss"));
+    }, 1000)
+    setTimer(timer);
+  }, []);
+  useEffect(() => {
+    startTimerHandler()
+  }, [startTimerHandler])
 
-  };
+  const playHandler = useCallback(() => {
+    setIsRunning(true);
+    const actualDate = moment().diff(difference)
+    console.log(difference)
+    timer = setInterval(() => {
+      let differ = moment().diff(actualDate)
+      console.log(`differ: ${differ}, actualDate: ${+actualDate}, difference: ${difference}`)
+      setDiff(moment.utc(differ).format("HH:mm:ss"));
+    }, 1000)
+    setTimer(timer);
+  }, []);
 
   return (
     <Block>
       <Buttons>
-        <button onClick={startTimerHandler}>start</button>
-        <button onClick={stopHandler}>stop</button>
+        {!isRunning
+          ? <button onClick={playHandler}>start</button>
+          : <button onClick={stopHandler}>stop</button>}
       </Buttons>
       <p>{diff}</p>
     </Block>
   );
-};
+});

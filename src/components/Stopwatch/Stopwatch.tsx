@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Timer} from "./Timer";
 import styled from "styled-components";
+import moment from "moment";
 
 const Block = styled.div`
   background-color: #53A115FF;
@@ -17,9 +18,9 @@ const Container = styled.div`
 
 export const Stopwatch = () => {
 
-  const [array, setArray] = useState<Date[]>([new Date()]);
+  const [array, setArray] = useState<moment.Moment[]>([]);
   const addTimerHandler = () => {
-    const date = new Date()
+    const date = moment()
     setArray((prevState) => [date, ...prevState])
   }
 
@@ -30,8 +31,7 @@ export const Stopwatch = () => {
         <button onClick={addTimerHandler}>Add</button>
       </div>
       <Block>
-        {array?.map((t)=> <Timer key={Math.random()} timer={t}/>)}
-
+        {array?.map((t)=> <Timer key={t.milliseconds()} timer={t}/>)}
       </Block>
     </Container>
   );

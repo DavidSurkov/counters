@@ -6,14 +6,13 @@ import {SimpleCounter} from "./components/SimpleCounter/SimpleCounter";
 import {DoubleCounter} from "./components/DoubleCounter/DoubleCounter";
 import {ChangingCounter} from "./components/ChangingCounter/ChangingCounter";
 import {ReduxCounter} from "./components/ReduxCounter/ReduxCounter";
-import {Stopwatch} from "./components/Stopwatch/Stopwatch";
+import {Hangman} from "./components/Hangman/Hangman";
 
 
 const AppStyle = styled.div`
-  height: 100vh;
   box-sizing: border-box;
   background-color: #000000;
-  padding: 100px 0;
+  padding: 10px 0;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -43,26 +42,26 @@ const NavigationStyle = styled.div`
 `
 
 function App() {
-    return (
-        <Router>
-            <AppStyle>
-                <NavigationStyle>
-                    <NavLink to={'/simple'}>Simple Counter</NavLink>
-                    <NavLink to={'/double'}>Double Counter</NavLink>
-                    <NavLink to={'/changing'}>Changing Counter</NavLink>
-                    <NavLink to={'/redux'}>Redux Counter</NavLink>
-                    <NavLink to={'/stopwatch'}>Stopwatch</NavLink>
-                </NavigationStyle>
-                <Routes>
-                    <Route path={'/simple'} element={<SimpleCounter/>}/>
-                    <Route path={'/double'} element={<DoubleCounter/>}/>
-                    <Route path={'/changing'} element={<ChangingCounter/>}/>
-                    <Route path={'/redux'} element={<ReduxCounter/>}/>
-                    <Route path={'/stopwatch'} element={<Stopwatch/>}/>
-                </Routes>
-            </AppStyle>
-        </Router>
-    );
+  return (
+    <Router>
+      <AppStyle>
+        <NavigationStyle>
+          <NavLink to={'/simple'}>Simple Counter</NavLink>
+          <NavLink to={'/double'}>Double Counter</NavLink>
+          <NavLink to={'/changing'}>Changing Counter</NavLink>
+          <NavLink to={'/redux'}>Redux Counter</NavLink>
+          <NavLink to={'/hangman'}>Hangman</NavLink>
+        </NavigationStyle>
+        <Routes>
+          <Route path={'/simple'} element={<SimpleCounter/>}/>
+          <Route path={'/double'} element={<DoubleCounter/>}/>
+          <Route path={'/changing'} element={<ChangingCounter/>}/>
+          <Route path={'/redux'} element={<ReduxCounter/>}/>
+          <Route path={'/hangman'} element={<Hangman/>}/>
+        </Routes>
+      </AppStyle>
+    </Router>
+  );
 }
 
 export default App;
